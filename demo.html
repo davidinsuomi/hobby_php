@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="txt"> </div>
+<div id="chartContainer" style="height: 300px; width: 100%;">
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+    function draw(source){
+        var para = JSON.parse(source);
+        var eventlist = JSON.stringify(para);//Jsonresult
+        var eventstring = new String();
+        eventstring = eventlist.toString().replace(/"/g, "");
+        eval(eventstring );
+        var chart = new CanvasJS.Chart("chartContainer",
+            {
+                zoomEnabled: true,
+
+                title:{
+                    text: "Chart With Date-Time Stamps Inputs"
+                },
+
+                data: [
+                    {
+                        type: "area",
+                        xValueType: "dateTime",
+                        dataPoints: eventstring,
+                    }
+                ]
+            });
+
+        chart.render();
+    }
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    } else { // code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function() {
+        if (this.readyState==4 && this.status==200) {
+            draw(this.responseText);
+        }
+    }
+    xmlhttp.open("GET","query.php",true);
+    xmlhttp.send();
+</script>
+</body>
+</html>
